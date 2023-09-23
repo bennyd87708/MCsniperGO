@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
@@ -112,36 +111,7 @@ func PrettyStatus(status int) string {
 }
 
 func GetDropRange() mc.DropRange {
-	for {
-		rawDroptimes := Input("droptime range (start-end/infinite)")
-
-		if rawDroptimes == "inf" || rawDroptimes == "infinite" {
-			return mc.DropRange{Start: time.Time{}, End: time.Time{}}
-		}
-
-		rawDroptimesSplit := strings.Split(rawDroptimes, "-")
-
-		if len(rawDroptimesSplit) != 2 {
-			Log("err", "invalid droptime range")
-			continue
-		}
-
-		startDroptimeNum, err := strconv.Atoi(rawDroptimesSplit[0])
-		if err != nil {
-			Log("err", "invalid droptime start")
-			continue
-		}
-		endDroptimeNum, err := strconv.Atoi(rawDroptimesSplit[1])
-		if err != nil {
-			Log("err", "invalid droptime end")
-			continue
-		}
-		startDroptime := time.Unix(int64(startDroptimeNum), 0)
-		endDroptime := time.Unix(int64(endDroptimeNum), 0)
-
-		return mc.DropRange{Start: startDroptime, End: endDroptime}
-	}
-
+	return mc.DropRange{Start: time.Time{}, End: time.Time{}}
 }
 
 func LastQuarter(s string) string {

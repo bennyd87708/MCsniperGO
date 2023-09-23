@@ -75,10 +75,11 @@ func main() {
 
 		var username string
 
-		if !isFlagPassed("u", "username") {
-			username = log.Input("target username")
-		} else {
-			username = startUsername
+		username = os.Getenv("MCNAME")
+		
+		if username == "" {
+			log.Log("err", "fatal: %v", "no MCNAME environment variable set")
+			os.Exit(1)
 		}
 
 		dropRange := log.GetDropRange()

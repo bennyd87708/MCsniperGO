@@ -1,6 +1,7 @@
 package claimer
 
 import (
+	"os"
 	"time"
 
 	"github.com/Kqzz/MCsniperGO/mc"
@@ -101,7 +102,7 @@ func claimName(claim ClaimAttempt, client *fasthttp.Client) {
 	var err error = nil
 
 	if claim.Proxy != "" {
-		client.Dial = fasthttpproxy.FasthttpHTTPDialer(claim.Proxy)
+		client.Dial = fasthttpproxy.FasthttpSocksDialer(claim.Proxy)
 	}
 
 	before := time.Now()
@@ -122,7 +123,11 @@ func claimName(claim ClaimAttempt, client *fasthttp.Client) {
 		log.Log("success", "Claimed %v on %v acc, %v", claim.Name, acc.Type, acc.Bearer[len(acc.Bearer)/2:])
 		log.Log("success", "Join https://discord.gg/2BZseKW for more!")
 	}
-
+	
+	if status == 401 {
+		log.Log("err", "restart: %v", "Lost authorization")
+		os.Exit(0)
+	}
 }
 
 func worker(claimChan chan ClaimAttempt, killChan chan bool) {
